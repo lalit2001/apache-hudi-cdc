@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  jupyter:
+    image: jupyter/pyspark-notebook:spark-3.4.1
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+    networks:
+      - spark-network
+    volumes:
+      - ./notebooks:/home/jovyan/
+    environment:
+      PACKAGES: "org.apache.hudi:hudi-spark3.4-bundle_2.12:0.15.0"
+      PYSPARK_SUBMIT_ARGS: "--packages org.apache.hudi:hudi-spark3.4-bundle_2.12:0.15.0 pyspark-shell"
+    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''"
+
+networks:
+  spark-network:
+volumes:
+  myvol:
+
+
+#
+#version: '3'
+#
+#services:
+#  spark-master:
+#    image: bitnami/spark:latest
+#    hostname: spark-master
+#    environment:
+#      - INIT_DAEMON_STEP=setup_spark
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - spark-network
+#
+#  jupyter:
+#    build: .
+#    ports:
+#      - "8888:8888"
+#    networks:
+#      - spark-network
+#    volumes:
+#      - ./local_lake:/home/jovyan/work
+#      - ./notebooks:/home/jovyan/
+#    environment:
+#      PACKAGES: "org.apache.hudi:hudi-spark3.4-bundle_2.12:0.15.0"
+#      PYSPARK_SUBMIT_ARGS: "--packages org.apache.hudi:hudi-spark3.4-bundle_2.12:0.15.0 pyspark-shell"
+#    depends_on:
+#      - spark-master
+#    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''"
+#
+#networks:
+#  spark-network:
+#volumes:
+#  myvol:
